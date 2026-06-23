@@ -1,0 +1,770 @@
+/* =========================================================
+   ДИЗАЙН-ТОКЕНИ
+   Палітра: тепла "архівна шафа притулку" — глибокий
+   чорно-коричневий фон, картки кольору старого паперу,
+   синій для імен (як штамп реєстратора), теракотовий CTA.
+   ========================================================= */
+:root{
+  --ink-900:#1b1612;
+  --ink-800:#241e19;
+  --ink-700:#332b24;
+  --paper:#f3ead9;
+  --paper-dim:#e8dcc6;
+  --paper-line:#d8c9aa;
+  --name-blue:#2c5f8a;
+  --name-blue-dark:#1f4666;
+  --terracotta:#c9622d;
+  --terracotta-dark:#a84e21;
+  --muted:#8a8270;
+  --muted-on-paper:#73674f;
+  --cream-text:#f1e9d8;
+
+  --font-display:'Fraunces', serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+
+  --radius-phone:38px;
+  --radius-card:18px;
+  --shadow-deep:0 30px 60px -20px rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+
+body{
+  background:#0e0b09;
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(255,255,255,.03), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255,255,255,.025), transparent 45%);
+  font-family:var(--font-body);
+  color:var(--cream-text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:48px 16px;
+}
+
+.stage{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+}
+
+.stage-hint{
+  font-size:13px;
+  color:var(--muted);
+  letter-spacing:.02em;
+  font-style:italic;
+}
+
+/* backdrop for the desktop side-drawer; hidden entirely on mobile */
+.overlay{display:none;}
+
+/* =========================================================
+   PHONE FRAME
+   ========================================================= */
+.phone{
+  position:relative;
+  width:375px;
+  height:760px;
+  background:var(--ink-800);
+  border-radius:var(--radius-phone);
+  box-shadow:var(--shadow-deep), 0 0 0 1px rgba(255,255,255,.04) inset;
+  overflow:hidden;
+  border:8px solid var(--ink-900);
+}
+
+.notch{
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  width:120px; height:22px;
+  background:var(--ink-900);
+  border-radius:0 0 16px 16px;
+  z-index:50;
+}
+
+/* =========================================================
+   SCREEN BASE + TRANSITIONS
+   "screens" stack absolutely; visibility/transform driven
+   by JS toggling classes is-active / is-leaving / is-detail-open
+   ========================================================= */
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease, transform .45s cubic-bezier(.22,.9,.3,1);
+}
+
+.screen--login,
+.screen--catalog{
+  transform:translateX(0);
+}
+
+.screen.is-active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* login exits to the left when leaving */
+.screen--login.is-leaving{
+  opacity:0;
+  transform:translateX(-30px);
+}
+
+/* catalog sits behind detail; detail slides in from right */
+.screen--detail{
+  transform:translateX(100%);
+  z-index:30;
+  background:var(--paper);
+}
+.screen--detail.is-active{
+  transform:translateX(0);
+  opacity:1;
+}
+
+/* =========================================================
+   LOGIN SCREEN
+   ========================================================= */
+.screen--login{
+  background:var(--ink-800);
+}
+
+.login-portrait{
+  position:relative;
+  flex:0 0 46%;
+  background:
+    linear-gradient(180deg, rgba(27,22,18,0) 55%, rgba(27,22,18,.95) 100%),
+    linear-gradient(135deg, #cdbfa0, #a99a7c);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.cat-paw-illustration{
+  width:200px;
+  opacity:.92;
+  transform:translateY(10px);
+}
+.paw-svg{width:100%; height:auto; filter:drop-shadow(0 14px 18px rgba(0,0,0,.25));}
+
+.case-id{
+  position:absolute;
+  top:18px; left:20px;
+  font-family:var(--font-mono);
+  font-size:10.5px;
+  letter-spacing:.12em;
+  color:rgba(27,22,18,.55);
+}
+
+.login-panel{
+  flex:1;
+  background:var(--ink-800);
+  padding:30px 28px 36px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--terracotta);
+  margin:0;
+}
+
+.login-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:38px;
+  line-height:1.06;
+  margin:0 0 6px;
+  color:var(--cream-text);
+}
+.login-title em{
+  font-style:italic;
+  font-weight:500;
+  color:var(--paper-dim);
+}
+
+.btn{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:15px;
+  border:none;
+  cursor:pointer;
+  border-radius:12px;
+  padding:15px 20px;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:active{transform:scale(.97);}
+
+.btn--primary{
+  background:var(--paper);
+  color:var(--ink-900);
+}
+.btn--primary:hover{background:#fff8ea;}
+
+.btn--block{width:100%; margin-top:10px;}
+.btn--grow{flex:1;}
+
+.link-btn{
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-family:var(--font-body);
+  font-size:13.5px;
+  text-align:center;
+  cursor:pointer;
+  padding:6px;
+  letter-spacing:.01em;
+}
+.link-btn:hover{color:var(--paper-dim);}
+
+/* =========================================================
+   CATALOG SCREEN
+   ========================================================= */
+.screen--catalog{
+  background:var(--ink-800);
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 18px 8px;
+}
+
+.topbar-mark{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:16px;
+  letter-spacing:.01em;
+  color:var(--paper);
+}
+
+.icon-btn{
+  width:34px; height:34px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06);
+  border:none;
+  border-radius:10px;
+  color:var(--paper-dim);
+  cursor:pointer;
+}
+.icon-btn:hover{background:rgba(255,255,255,.1);}
+
+.avatar-chip{
+  width:34px; height:34px;
+  border-radius:10px;
+  background:var(--terracotta);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  padding:14px 18px 12px;
+}
+
+.tab{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  padding:9px 14px;
+  border-radius:9px;
+  border:none;
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  cursor:pointer;
+  transition:background .15s ease, color .15s ease;
+  white-space:nowrap;
+}
+.tab.is-active{
+  background:var(--paper);
+  color:var(--ink-900);
+}
+.tab:not(.is-active):hover{background:rgba(255,255,255,.09); color:var(--paper-dim);}
+
+.card-feed{
+  flex:1;
+  overflow-y:auto;
+  padding:6px 18px 24px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  scrollbar-width:none;
+}
+.card-feed::-webkit-scrollbar{display:none;}
+
+/* ---- Cat card : looks like a punch-card from a shelter ledger ---- */
+.cat-card{
+  position:relative;
+  background:var(--ink-900);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius-card);
+  padding:14px;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(18px);
+  animation:cardRise .5s cubic-bezier(.22,.9,.3,1) forwards;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.cat-card:hover{border-color:rgba(255,255,255,.16); transform:translateY(-2px);}
+.cat-card:active{transform:translateY(0) scale(.99);}
+
+@keyframes cardRise{
+  to{opacity:1; transform:translateY(0);}
+}
+
+.cat-card__photo{
+  position:relative;
+  height:190px;
+  border-radius:12px;
+  background:linear-gradient(160deg,#2a241e,#171310);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cat-card__fav{
+  position:absolute;
+  top:10px; left:10px;
+  width:30px; height:30px;
+  border-radius:50%;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(3px);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--paper);
+  z-index:5;
+  border:none;
+  cursor:pointer;
+}
+.cat-card__fav.is-fav{color:var(--terracotta);}
+.cat-card__fav svg{pointer-events:none;}
+.cat-card__fav.is-fav svg path{fill:var(--terracotta);}
+
+.cat-card__id{
+  position:absolute;
+  bottom:10px; right:12px;
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:.05em;
+  color:rgba(243,234,217,.55);
+  z-index:5;
+}
+
+.cat-card__meta{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  padding:14px 6px 4px;
+}
+
+.cat-card__name{
+  font-family:var(--font-display);
+  font-style:italic;
+  font-weight:600;
+  font-size:21px;
+  color:var(--name-blue);
+}
+
+.cat-card__sub{
+  font-family:var(--font-body);
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.01em;
+}
+
+.cat-card__status{
+  position:absolute;
+  top:10px; right:10px;
+  font-family:var(--font-mono);
+  font-size:9.5px;
+  letter-spacing:.08em;
+  padding:5px 9px;
+  border-radius:7px;
+  background:rgba(0,0,0,.45);
+  color:var(--paper-dim);
+  z-index:5;
+}
+
+/* generated cat illustration (CSS shape, no external image needed) */
+.cat-illustration{ width:74%; }
+
+/* =========================================================
+   DETAIL SCREEN
+   ========================================================= */
+.detail-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 16px 6px;
+  background:var(--paper);
+}
+.icon-btn--ghost{
+  background:rgba(27,22,18,.06);
+  color:var(--ink-900);
+}
+.icon-btn--ghost:hover{background:rgba(27,22,18,.12);}
+
+.detail-name{
+  font-family:var(--font-display);
+  font-style:italic;
+  font-weight:600;
+  font-size:19px;
+  color:var(--name-blue);
+}
+
+.detail-scroll{
+  flex:1;
+  overflow-y:auto;
+  scrollbar-width:none;
+}
+.detail-scroll::-webkit-scrollbar{display:none;}
+
+.detail-photo{
+  position:relative;
+  margin:6px 16px 0;
+  height:240px;
+  border-radius:16px;
+  background:linear-gradient(160deg,#2a241e,#171310);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.stamp{
+  position:absolute;
+  top:14px; left:14px;
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:.1em;
+  color:var(--paper);
+  border:1.4px solid rgba(243,234,217,.65);
+  border-radius:5px;
+  padding:5px 9px;
+  transform:rotate(-3deg);
+  background:rgba(0,0,0,.25);
+}
+
+.photo-dots{
+  position:absolute;
+  bottom:12px; left:0; right:0;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+.photo-dots span{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:rgba(243,234,217,.3);
+}
+.photo-dots span.is-active{background:var(--paper);}
+
+.detail-body{
+  padding:22px 22px 4px;
+}
+
+.eyebrow--detail{margin-bottom:8px;}
+
+.detail-title{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:30px;
+  color:var(--ink-900);
+  margin:0 0 18px;
+}
+
+.spec-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px 18px;
+  margin:0 0 24px;
+  padding:16px 16px;
+  background:var(--paper-dim);
+  border:1px solid var(--paper-line);
+  border-radius:12px;
+}
+.spec-list div{display:flex; flex-direction:column; gap:2px;}
+.spec-key{
+  font-family:var(--font-mono);
+  font-size:9.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted-on-paper);
+}
+.spec-val{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:14px;
+  color:var(--ink-900);
+}
+
+.section-label{
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--terracotta-dark);
+  margin:0 0 10px;
+}
+
+.detail-notes{
+  font-family:var(--font-body);
+  font-size:13.5px;
+  line-height:1.65;
+  color:var(--muted-on-paper);
+  margin:0 0 28px;
+}
+
+.detail-footer{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 20px;
+  background:var(--paper);
+  border-top:1px solid var(--paper-line);
+}
+
+.icon-btn--square{
+  width:50px; height:50px;
+  border-radius:12px;
+  background:var(--paper-dim);
+  border:1px solid var(--paper-line);
+  color:var(--ink-900);
+  flex:0 0 50px;
+}
+.icon-btn--square.is-fav{color:var(--terracotta);}
+.icon-btn--square.is-fav svg path{fill:var(--terracotta);}
+
+.detail-footer .btn--grow{
+  background:var(--ink-900);
+  color:var(--paper);
+  font-size:15px;
+}
+.detail-footer .btn--grow:hover{background:#000;}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+.toast{
+  position:fixed;
+  bottom:36px; left:50%;
+  transform:translate(-50%, 16px);
+  background:var(--paper);
+  color:var(--ink-900);
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:13.5px;
+  padding:13px 22px;
+  border-radius:12px;
+  box-shadow:0 14px 30px -8px rgba(0,0,0,.5);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+  z-index:999;
+}
+.toast.is-visible{
+  opacity:1;
+  transform:translate(-50%, 0);
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE (default, < 900px)
+   На малих екранах сайт виглядає як застосунок у рамці
+   телефону: один екран на весь видимий простір, навігація
+   через "екрани", що зʼявляються/виїжджають.
+   ========================================================= */
+@media (max-width:430px){
+  body{padding:0;}
+  .stage{gap:12px;}
+  .phone{
+    width:100vw;
+    height:100vh;
+    border-radius:0;
+    border:none;
+  }
+  .stage-hint{display:none;}
+}
+
+/* =========================================================
+   RESPONSIVE — DESKTOP (≥ 900px)
+   На великому екрані телефонна рамка зникає. Каталог стає
+   повноекранною сіткою карток, а деталі кота відкриваються
+   як бокова панель (drawer) праворуч, не перекриваючи весь
+   контент — як у вебкаталогах, а не в мобільному застосунку.
+   ========================================================= */
+@media (min-width:900px){
+
+  body{
+    padding:0;
+    align-items:stretch;
+    justify-content:stretch;
+  }
+
+  .stage{
+    width:100%;
+    gap:0;
+  }
+
+  .stage-hint{display:none;}
+
+  /* phone frame -> full browser canvas */
+  .phone{
+    position:relative;
+    width:100%;
+    height:100vh;
+    max-width:none;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+    background:var(--ink-800);
+    overflow:visible;
+  }
+
+  .notch{display:none;}
+
+  /* screens no longer stack full-bleed on top of each other;
+     login/catalog behave like normal page sections, detail
+     becomes a fixed side drawer */
+  .screen{
+    position:relative;
+    height:100vh;
+    transform:none !important;
+  }
+
+  .screen--login,
+  .screen--catalog{
+    position:absolute;
+    inset:0;
+  }
+
+  /* ---------- LOGIN : split screen ---------- */
+  .screen--login{
+    flex-direction:row;
+  }
+
+  .login-portrait{
+    flex:0 0 55%;
+    height:100%;
+  }
+
+  .cat-paw-illustration{
+    width:340px;
+  }
+
+  .case-id{
+    top:32px; left:40px;
+    font-size:12px;
+  }
+
+  .login-panel{
+    flex:1;
+    justify-content:center;
+    padding:0 90px;
+    max-width:560px;
+    gap:18px;
+  }
+
+  .login-title{
+    font-size:52px;
+  }
+
+  .btn--block{
+    width:auto;
+    align-self:flex-start;
+    padding:16px 36px;
+  }
+
+  /* ---------- CATALOG : top nav + grid ---------- */
+  .topbar{
+    padding:26px 48px 10px;
+  }
+  .topbar-mark{font-size:19px;}
+
+  .tabs{
+    padding:18px 48px 22px;
+  }
+  .tab{
+    font-size:13px;
+    padding:11px 20px;
+  }
+
+  .card-feed{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    align-items:start;
+    gap:26px;
+    padding:6px 48px 64px;
+    max-width:1280px;
+    margin:0 auto;
+  }
+
+  .cat-card:hover{transform:translateY(-4px);}
+
+  /* ---------- DETAIL : side drawer, not full screen ---------- */
+  .screen--detail{
+    position:fixed;
+    top:0; right:0;
+    width:440px;
+    height:100vh;
+    transform:translateX(100%);
+    box-shadow:-30px 0 60px -20px rgba(0,0,0,.5);
+    z-index:60;
+  }
+  .screen--detail.is-active{
+    transform:translateX(0);
+  }
+
+  .detail-topbar{padding:24px 24px 8px;}
+  .detail-photo{margin:6px 22px 0; height:280px;}
+  .detail-body{padding:24px 26px 4px;}
+  .detail-title{font-size:32px;}
+  .detail-footer{padding:16px 22px 24px;}
+
+  /* backdrop behind the drawer, dims the catalog */
+  .overlay{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(2px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .35s ease;
+    z-index:55;
+  }
+  .overlay.is-active{
+    opacity:1;
+    pointer-events:auto;
+  }
+}
+
+/* overlay only ever appears on desktop; see base rule near :root */
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important; transition-duration:.001s !important;}
+}
+
+/* focus visibility */
+button:focus-visible{
+  outline:2px solid var(--terracotta);
+  outline-offset:2px;
+}
