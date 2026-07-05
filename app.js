@@ -33,6 +33,28 @@ function catSilhouette(strokeColor){
   </svg>`;
 }
 
+/* ---------------------------------------------------------
+   Фолбек, якщо файл фото не завантажився: підмінюємо <img>
+   на SVG-силует того ж кота (викликається з onerror у markup).
+--------------------------------------------------------- */
+window.handlePhotoError = function(imgEl, strokeColor){
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = catSilhouette(strokeColor).trim();
+  imgEl.replaceWith(wrapper.firstElementChild);
+};
+
+/* ---------------------------------------------------------
+   Рендер фото кота: реальне фото, якщо є, з автоматичним
+   фолбеком на SVG-силует, якщо файл не завантажився.
+--------------------------------------------------------- */
+function catPhotoMarkup(cat){
+  if(!cat.photo){
+    return catSilhouette(cat.pawColor);
+  }
+  return `<img class="cat-photo-img" src="${cat.photo}" alt="${cat.name}" loading="lazy"
+    onerror="handlePhotoError(this, '${cat.pawColor}')">`;
+}
+
 const heartIcon = (filled) => `
   <svg viewBox="0 0 24 24" width="16" height="16">
     <path d="M12 20s-7-4.5-9.3-9C1.2 7.6 2.7 4.5 6 4.2 8 4 10 5 12 7.5 14 5 16 4 18 4.2c3.3.3 4.8 3.4 3.3 6.8C19 15.5 12 20 12 20z"
@@ -46,7 +68,7 @@ function renderCards(){
   cardFeed.innerHTML = CATS.map((cat, i) => `
     <article class="cat-card" data-id="${cat.id}" style="animation-delay:${i * 70}ms" tabindex="0" role="button" aria-label="Відкрити справу ${cat.name}">
       <div class="cat-card__photo">
-        ${catSilhouette(cat.pawColor)}
+        ${catPhotoMarkup(cat)}
         <span class="cat-card__status">${cat.status}</span>
         <button class="cat-card__fav ${favorites.has(cat.id) ? 'is-fav' : ''}" data-fav="${cat.id}" aria-label="Додати до улюблених">
           ${heartIcon(favorites.has(cat.id))}
@@ -74,7 +96,7 @@ function openDetail(catId){
   document.getElementById('detail-notes').textContent = cat.notes;
 
   document.getElementById('detail-photo').innerHTML = `
-    ${catSilhouette(cat.pawColor)}
+    ${catPhotoMarkup(cat)}
     <span class="stamp" id="detail-stamp">${cat.status}</span>
     <div class="photo-dots" id="photo-dots">
       <span class="is-active"></span><span></span><span></span>

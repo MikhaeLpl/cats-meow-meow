@@ -402,8 +402,17 @@ body{
   z-index:5;
 }
 
-/* generated cat illustration (CSS shape, no external image needed) */
+/* generated cat illustration (CSS shape, fallback if a photo fails to load) */
 .cat-illustration{ width:74%; }
+
+/* real cat photos inside card / detail photo frames */
+.cat-photo-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 30%;
+  display:block;
+}
 
 /* =========================================================
    DETAIL SCREEN
@@ -589,14 +598,17 @@ body{
    телефону: один екран на весь видимий простір, навігація
    через "екрани", що зʼявляються/виїжджають.
    ========================================================= */
-@media (max-width:430px){
+@media (max-width:899px){
   body{padding:0;}
-  .stage{gap:12px;}
+  .stage{gap:12px; width:100%;}
   .phone{
     width:100vw;
+    width:100dvw;
     height:100vh;
+    height:100dvh;
     border-radius:0;
     border:none;
+    box-shadow:none;
   }
   .stage-hint{display:none;}
 }
